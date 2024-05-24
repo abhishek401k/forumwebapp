@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    h1 Contact Us
+    p
+        |You can contact us by creating a post. 
+        |Or you can send an email to 
+        a(href=`mailto:${contact_email}`)=contact_email
+        |.

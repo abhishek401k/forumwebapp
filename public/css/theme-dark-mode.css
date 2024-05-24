@@ -1,0 +1,109 @@
+.main-logo a #peaches {
+    color: #f1e5a9;
+}
+  
+.main-logo a #stink {
+    color: #ec93da;
+}
+
+#curr-castle, .main-nav .sub-nav-item {
+    color: #86d688;
+}
+
+body, .sort1 .curr-sort, .cheader a:hover, .pinfo1, .pinfo1-under, .pinfo1 a, .pinfo1-under a, .pinfo-s a:hover {
+    color: #fcfcfc;
+}
+
+.cheader, .cheader a, .pinfo1 a:hover, .pinfo1-under a:hover, .pinfo-s, .pinfo-s a {
+    color: #d3d3d3;
+}
+
+.ptitle, .ptitle-s {
+    color: #8888ff;
+}
+
+.ptitle:visited, .ptitle-s:visited {
+    color: #ad79dc;
+}
+
+.domname1 {
+    color: #cccccc;
+}
+
+.sort1 a {
+    color: #f1f1f1;
+}
+
+.main-nav a, .settings-nav a {
+    color: #e2e2e2;
+}
+
+.main-footer a {
+    color: #ffcc00;
+}
+
+.backpost-nav a, .more {
+    background: #999999;
+    color: #333333;
+    border: 1px solid #bbbbbb;
+}
+
+.clinks a {
+    color: #bbbb99;
+}
+
+pre {
+    background: #454545;
+    color: #998877;
+}
+
+.main-text pre a, .the-post-content pre a, .cmeat pre a, .the-comment-content pre a {
+    color: #8888ff;
+}
+
+.uerror1 {
+    color: #dd6666;
+}
+
+.usuccess1 {
+    color: #66dd66;
+}
+
+main em {
+    background: #414243;
+    color: #ccbbaa;
+}
+
+.main-text a, .the-post-content a, .cmeat a, .the-comment-content a {
+    color: #8888ff;
+}
+
+.comments :target {
+    border: 2px solid #eeeeee;
+}
+
+.cid {
+    background-color: darkolivegreen;
+    border: 1px solid #333333;
+    color: lightgrey;
+}
+
+#username,
+#password,
+#site-width,
+#posts-per-page,
+#posts-vertical-spacing,
+#title,
+#link,
+#text_content,
+#tags,
+#profile,
+#castle,
+#name,
+#ruri {
+    border-color: #777777;
+    border-radius: 2px;
+    border-style: solid;
+    background-color: #050505;
+    color: #fcfcfc;
+}

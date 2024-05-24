@@ -1,0 +1,34 @@
+mixin ucListComment(pComment, pUser, pCommentReplyMode, isTargetLink, isSubModLoggedIn)
+    div(id=pComment.public_id)
+        div.cheader
+            |by
+            | 
+            a(href=`/u/${pComment.user_public_id}`)=pComment.username
+
+            | 
+            |on #{pComment.created_on}
+
+        span.cmeat
+            +bbCodes(pComment.text_content)
+
+        div.clinks
+            a(href=`/c/${pComment.public_id}`) link
+
+            if isTargetLink
+                | 
+                a(href=`#${pComment.public_id}`) link#
+
+            if pUser
+                | 
+                if pCommentReplyMode == 'quick'
+                    a(onclick=`reply('${pComment.public_id}', ${isTargetLink});return false;` href="#") reply
+                else
+                    a(href=`/c/${pComment.public_id}#write-comment`) reply
+
+            if pUser && pUser.user_id == pComment.user_id
+                | 
+                a(href=`/c/${pComment.public_id}/edit`) edit
+
+            if pUser && (pUser.user_id == pComment.user_id || pUser.user_id == adminUserId || isSubModLoggedIn)
+                | 
+                a(href=`/c/${pComment.public_id}/delete`) delete

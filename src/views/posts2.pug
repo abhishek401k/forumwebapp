@@ -1,0 +1,90 @@
+extends layout
+
+mixin postTitle(p)
+    if p.link === null
+        a(class="ptitle" href=`/p/${p.public_id}`) #{p.title}
+    else
+        a(class="ptitle" href=p.link)= p.title
+        | 
+        span.domname1 (#{p.domain_name})
+
+mixin postLinks(p)
+    a(href=`/p/${p.public_id}`) comments(#{p.num_comments})
+
+    if user && user.user_id == p.user_id
+        | 
+        a(href=`/p/${p.public_id}/edit`) edit
+
+    if user && (user.user_id == p.user_id || user.user_id == adminUserId || user.user_id == p.lead_mod)
+        | 
+        a(href=`/p/${p.public_id}/delete`) delete
+
+
+mixin singleLinePost(p)
+    div
+        +postTitle(p)
+
+        span.pinfo1
+            | 
+            |by 
+            a(href=`/u/${p.user_public_id}`)=p.username
+
+            | 
+            |on #{p.created_on}
+
+            | 
+            |to 
+            a(href=`/r/${p.castle}`)=p.castle
+
+            | 
+            +postLinks(p)
+
+mixin multiLinePost(p)
+    div
+        +postTitle(p)
+
+        div.pinfo1-under
+            |by 
+            a(href=`/u/${p.user_public_id}`)=p.username
+
+            | 
+            |on #{p.created_on}
+
+            | 
+            |to 
+            a(href=`/r/${p.castle}`)=p.castle
+
+            | 
+            +postLinks(p)
+
+block content
+    div.sort1o
+        span.sort1
+            a(class=(sort == '' ? 'curr-sort' : '') href=base_url) newest
+            | 
+            a(class=(sort == 'oldest' ? 'curr-sort' : '') href=`${base_url}?sort=oldest`) oldest
+            | 
+            a(class=(sort == 'comments' ? 'curr-sort' : '') href=`${base_url}?sort=comments`) comments
+            | 
+            a(class=(sort == 'last' ? 'curr-sort' : '') href=`${base_url}?sort=last`) last comment
+
+    if posts.length
+        .posts
+
+            each post in posts
+                if post_layout == 'single-line'
+                    +singleLinePost(post)
+                else
+                    +multiLinePost(post)
+
+        div
+            -
+                let pageUrl = `${base_url}?p=${page + 1}`
+
+                if(sort !== '') {
+                    pageUrl += `&sort=${sort}`
+                }
+
+            a(class="more" href=pageUrl) more &gt;
+    else
+        span no posts

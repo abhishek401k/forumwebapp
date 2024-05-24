@@ -1,0 +1,331 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/api.css`)
+
+block content
+    h1 API
+
+    ul
+        li
+            a(href="#api-endpoints") API Endpoints
+        li
+            a(href="#api-user-authentication") API User Authentication
+        li
+            a(href="#api-errors") API Errors
+
+    h2#api-endpoints API Endpoints
+
+    p.
+        The full URL for all endpoints starts with #[em=apiBaseUrl]. All endpoints return JSON.
+        All POST and PUT requests must have a content type of #[em application/x-www-form-urlencoded].
+
+    ul
+        li
+            a(href="#get-comment") GET /comment
+        li
+            a(href="#get-post") GET /post
+        li
+            a(href="#get-posts") GET /posts
+        li
+            a(href="#get-sub-posts") GET /sub/posts
+        li
+            a(href="#post-comment") POST /comment
+        li
+            a(href="#post-post") POST /post
+        li
+            a(href="#put-comment") PUT /comment
+        li
+            a(href="#put-post") PUT /post
+        li
+            a(href="#delete-comment") DELETE /comment
+        li
+            a(href="#delete-post") DELETE /post
+
+    h3#get-comment GET /comment
+
+    p.
+        This call will return a single comment and its subcomments.
+
+    h4 Query Params
+
+    ul
+        li #[b commentid]: the comment id of the comment you want to get, required
+        li #[b p]: page number for subcomment pagination, there are #{commentsPerPage} subcomments per page, the default page number is 1, optional
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token to make this call with a logged in user (see #[a(href="#api-user-authentication") API User Authentication]), optional
+
+    h4 Examples
+
+    p
+        a(href="/api/v1/comment?commentid=utePeJTWFGjstaQfbVntPn") /comment?commentid=utePeJTWFGjstaQfbVntPn
+
+    h3#get-post GET /post
+
+    p.
+        This call will return a single post and its comments.
+
+    h4 Query Params
+
+    ul
+        li #[b postid]: the post id of the post you want to get, required
+        li #[b p]: page number for comment pagination, there are #{commentsPerPage} comments per page, the default page number is 1, optional
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token to make this call with a logged in user (see #[a(href="#api-user-authentication") API User Authentication]), optional
+
+    h4 Examples
+
+    p
+        a(href="/api/v1/post?postid=SxqYZnDk26oisgSCS9bTjN") /post?postid=SxqYZnDk26oisgSCS9bTjN
+
+    h3#get-posts GET /posts
+
+    p.
+        This returns all posts, exactly like the #[a(href="/") homepage].
+        The data is paginated at 20 posts per page.
+
+    h4 Query Params
+
+    ul
+        li #[b p]: page number for post pagination, the default page number is 1, optional
+        li #[b sort]: this is for post sorting, it can be either #[em newest], #[em oldest], #[em comments] or #[em last], see #[a(href="/help#posts") posts] in help for more info, the default is #[em newest], optional
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token to make this call with a logged in user (see #[a(href="#api-user-authentication") API User Authentication]), optional
+
+    h4 Examples
+
+    p
+        a(href="/api/v1/posts") /posts
+
+    p
+        a(href="/api/v1/posts?p=2") /posts?p=2
+
+    p
+        a(href="/api/v1/posts?sort=comments") /posts?sort=comments
+
+    h3#get-sub-posts GET /sub/posts
+
+    p.
+        This returns posts for a certain sub. 
+        The data is paginated at 20 posts per page.
+
+    h4 Query Params
+
+    ul
+        li #[b sub]: the sub, required
+        li #[b p]: page number for post pagination, the default page number is 1, optional
+        li #[b sort]: this is for post sorting, it can be either #[em newest], #[em oldest], #[em comments] or #[em last], see #[a(href="/help#posts") posts] in help for more info, the default is #[em newest], optional
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token to make this call with a logged in user (see #[a(href="#api-user-authentication") API User Authentication]), optional
+
+    h4 Examples
+
+    p
+        a(href="/api/v1/sub/posts?sub=meta") /sub/posts?sub=meta
+
+    p
+        a(href="/api/v1/sub/posts?sub=meta&p=2") /posts?sub=meta&p=2
+
+    p
+        a(href="/api/v1/sub/posts?sub=meta&sort=comments") /posts?sub=meta&sort=comments
+
+    h3#post-comment POST /comment
+
+    p.
+        This will create a new comment. It can create a comment on a post or another comment. Supply either a #[em post_id] or a #[em comment_id], supplying both or neither is an error.
+
+    h4 Body Params
+
+    ul
+        li #[b post_id]: post id of the post you want to create a comment on
+        li #[b comment_id]: comment id of the comment you want to create a comment on
+        li #[b text_content]: the comment text, required
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token (see #[a(href="#api-user-authentication") API User Authentication]), required
+
+    h4 Examples
+
+    p.
+        #[em Invoke-RestMethod -Method POST -Uri "#{apiBaseUrl}/comment" -Headers @{Authorization='Bearer cb1ef3699927c3f293d4b5a116409ecf4b92707f'} -Body @{post_id='O9qIMDTUUlm512s3hZu0ps';text_content='hello';}]
+
+    p.
+        #[em Invoke-RestMethod -Method POST -Uri "#{apiBaseUrl}/comment" -Headers @{Authorization='Bearer cb1ef3699927c3f293d4b5a116409ecf4b92707f'} -Body @{comment_id='J2nfJKIeeIIF6ScwxJL2F2';text_content='hi!';}]
+
+    h3#post-post POST /post
+
+    p.
+        This will create a new post.
+
+    h4 Body Params
+
+    ul
+        li #[b title]: title of the post, max characters is 160, required
+        li #[b link]: URL of the post, optional
+        li #[b text_content]: the text body/content of the post, optional
+        li #[b sub]: sub for the post, required
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token (see #[a(href="#api-user-authentication") API User Authentication]), required
+
+    h4 Examples
+
+    p.
+        #[em Invoke-RestMethod -Method POST -Uri "#{apiBaseUrl}/post" -Headers @{Authorization='Bearer 50595b011188c5b76378066623f6c4f84d9272e9'} -Body @{title='my title 66bb';link='http://somesite.com';text_content='some content';sub='science';}]
+
+    h3#put-comment PUT /comment
+
+    p.
+        This endpoint edits a comment.
+
+    h4 Body Params
+
+    ul
+        li #[b comment_id]: comment id of the comment you want to edit, required
+        li #[b text_content]: the new comment text, required
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token (see #[a(href="#api-user-authentication") API User Authentication]), required
+
+    h4 Examples
+
+    p.
+        #[em Invoke-RestMethod -Method PUT -Uri "#{apiBaseUrl}/comment" -ContentType "application/x-www-form-urlencoded" -Headers @{Authorization='Bearer f55b564268cd8b14c394b0723f4d20b96ae2066b'} -Body @{comment_id='tnH5OAmOkilFPUsRmyW5d0';text_content='my new content'}]
+
+    h3#put-post PUT /post
+
+    p.
+        This will edit a post.
+
+    h4 Body Params
+
+    ul
+        li #[b post_id]: post id of the post you want to edit, required
+        li #[b title]: a new title for the post, optional
+        li #[b link]: a new URL for the post, optional
+        li #[b text_content]: new text content for the post, optional
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token (see #[a(href="#api-user-authentication") API User Authentication]), required
+
+    h4 Examples
+
+    p.
+        #[em Invoke-RestMethod -Method PUT -Uri "#{apiBaseUrl}/post" -ContentType "application/x-www-form-urlencoded" -Headers @{Authorization='Bearer d80743e5ece197fa8bc888ffef5f3d7df993ecd7'} -Body @{post_id='cdD7zmyruJDJFieTLtKXls';title='my new title';text_content='some new content.'}]
+
+    h3#delete-comment DELETE /comment
+
+    p.
+        This deletes a comment.
+
+    h4 Query Params
+
+    ul
+        li #[b comment_id]: comment id of the comment you want to delete, required
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token (see #[a(href="#api-user-authentication") API User Authentication]), required
+
+    h4 Examples
+
+    p.
+        #[em Invoke-RestMethod -Method DELETE -Uri "#{apiBaseUrl}/comment?comment_id=D38yoq7I71oSON8jrxnF9a" -Headers @{Authorization='Bearer 4932ee96e45e154bb8a766f52dbc7ee3a34f1f3a'}]
+
+    h3#delete-post DELETE /post
+
+    p.
+        This deletes a post.
+
+    h4 Query Params
+
+    ul
+        li #[b post_id]: post id of the post you want to delete, required
+
+    h4 Headers
+
+    ul
+        li #[b Authorization: Bearer xxx]: replace xxx with an OAuth 2 access token (see #[a(href="#api-user-authentication") API User Authentication]), required
+
+    h4 Examples
+
+    p.
+        #[em Invoke-RestMethod -Method DELETE -Uri "#{apiBaseUrl}/post?post_id=3wCYDmiQR2rOZHTpDdrHu" -Headers @{Authorization='Bearer 48780f71186895055d8246ecfc5c95420d049f30'}]
+
+    h2#api-user-authentication API User Authentication
+
+    p.
+        You can authenticate users for API calls by using OAuth 2. Here are the instructions for how to use our OAuth 2 setup:
+    
+    p.
+        #[b Step 1:] Sign up, log in and go to app IDs in the settings. Register your app by specifying a name and a redirect URI. Once you register your app the client ID will show. You will need to use the client ID and redirect URI in later steps.
+    
+    p.
+        #[b Step 2:] In the app you're building, make the login button display this page in the browser:
+    
+    p.
+        #[em #{siteBaseUrl}/oauth/authorize?client_id=xxx&state=yyy&response_type=code&redirect_uri=zzz&code_challenge=aaa&code_challenge_method=bbb]
+    
+    p.
+        Replace xxx with your client ID, replace yyy with a state value (it can be anything), and fill in zzz with your redirect URI (it must match the redirect URI from step 1). Replace aaa with either a code verifier or the hash of a code verifier. bbb should be "plain" if you only pass a plain code verifier, and bbb should be "S256" if you pass a hashed code verifier.
+
+    p.
+        A code verifier is a random 43 character string made up of a-z, A-Z, 0-9, "_", "-", "." and "~". To hash the code verifier you first take the SHA256 hash and then you base64-URL-encode the value. You know your hash algorithm is correct if "waffle" yields the value "X6tfQ9Cy-XUm59qsseQv_ReOIGfFmgA20NmEo77Cifs".
+    
+    p.
+        When a user visits the above URL they have to click a confirm button.
+    
+    p.
+        #[b Step 3:] When a user clicks the confirm button they will be redirected to your redirect URI with a state variable and a code variable in the URL. The code variable is an authorization code. The app you're building now requests POST /oauth/token. Here is the request in PowerShell: 
+    
+    p.
+        #[em Invoke-WebRequest -Uri #{siteBaseUrl}/oauth/token -Method POST -Body @{client_id='xxx';grant_type='authorization_code';code='yyy';redirect_uri='zzz';code_verifier='aaa'}]
+    
+    p.
+        Replace xxx with your client ID, replace yyy with the authorization code that was in the URL, and use your redirect URI for zzz. Replace aaa with the code verifier that you generated in step 2. If successful, the above URL request will return JSON that contains an access token.
+
+    p.
+        #[b Step 4:] Now you can pass the access token to API calls and it will be as if a user is logged in. For example, in PowerShell:
+
+    p.
+        #[em Invoke-RestMethod -Method Get -Uri "#{apiBaseUrl}/posts" -Headers @{Authorization='Bearer xxx'}]
+    
+    p.
+        Replace xxx with your access token obtained from step 3.
+
+    h2#api-errors API Errors
+
+    p.
+        If an API request results in an error then the http status code will be 400 or 500 something, and the returned JSON will only be an array of error messages. For example, if you try to get a post without a postid in the URL:
+
+    p
+        a(href=`${apiBaseUrl}/post`) #{apiBaseUrl}/post
+
+    p.
+        Then you will get a 400 and this JSON back:
+
+    pre.
+        {
+            "errors": ["no postid in URL"]
+        }

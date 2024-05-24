@@ -1,0 +1,127 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/single-post.css`)
+
+    if user && comment_reply_mode == 'quick'
+        script(src=`${jsDir}/shared.js`)
+
+include bbCodes.pug
+include userContent.pug
+
+block content
+    - const isSubModLoggedIn = user && (post.lead_mod == user.user_id)
+
+    div.the-post
+        if post.link === null
+            h1
+                a(href=`/p/${post.public_id}` class="ptitle-s")=post.title
+        else
+            h1
+                a(href=post.link class="ptitle-s")=post.title
+                | 
+                span.domname1 (#{post.domain_name})
+
+        div.pinfo-s
+            |by 
+            a(href=`/u/${post.user_public_id}`)=post.username
+
+            | 
+            |on #{post.created_on}
+
+            | 
+            |to 
+            a(href=`/r/${post.castle}`)=post.castle
+
+            | 
+            a(href=`/p/${post.public_id}`) comments(#{post.num_comments})
+
+            if user && post.user_id == user.user_id
+                | 
+                a(href=`/p/${post.public_id}/edit`) edit
+
+            if user && (post.user_id == user.user_id || user.user_id == adminUserId || isSubModLoggedIn)
+                | 
+                a(href=`/p/${post.public_id}/delete`) delete
+
+        if post.text_content !== null
+            div.the-post-content
+                +bbCodes(post.text_content)
+
+    if user
+        form(method="post" id="write-comment")
+            if errors.length
+                ul.uerror1
+                    each error in errors
+                        li #{error.msg}
+
+            div
+                label(for="text_content") Write a Comment
+                textarea(name="text_content" id="text_content" class="comment-box1" rows="10" cols="36")
+            div
+                input(type="submit" value="Submit Comment")
+
+    .comments
+        if comments.length
+            - let currIndent = 0
+            - let isFirst = true
+
+            <ul>
+
+            for comment in comments
+                - const commentIndent = comment.path.split('.').length - 2
+
+                if isFirst
+
+                    - let i = 0
+
+                    while i < commentIndent
+                        <li style="list-style-type:none"><ul>
+                        - ++i
+
+                    <li>
+                    +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    - isFirst = false
+                    - currIndent = commentIndent
+                else 
+                    if commentIndent > currIndent
+                        <ul><li>
+                        +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    else if commentIndent < currIndent
+                        - let diffIndent = currIndent - commentIndent
+                        - let n = 0
+
+                        </li>
+
+                        while n < diffIndent
+                            </ul></li>
+                            - ++n
+                        
+                        <li>
+                        +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    else
+                        </li><li>
+                        +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    
+                    - currIndent = commentIndent
+
+            if currIndent > 0 
+                - let n = 0
+
+                </li>
+
+                while n < currIndent
+                    </ul></li>
+                    - ++n
+                
+                </ul>
+            else
+                </li></ul>
+
+            if page < total_pages
+                div
+                    - let pageUrl = `/p/${post.public_id}?p=${page + 1}`
+
+                    a(class="more" href=pageUrl) more &gt;
+        else
+            div.no-comments no comments yet

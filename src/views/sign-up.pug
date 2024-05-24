@@ -1,0 +1,37 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/sign-up.css`)
+
+block content
+    - const isLogin = is_login === 'yes'
+
+    h1 Sign Up
+
+    if errors.length
+        ul.uerror1
+            each error in errors
+                li #{error.msg}
+
+    if follow_user_id
+        div(class="alert3o")
+            span(class="alert3")
+                |You need to sign up in order to follow #[a(href=`/u/${follow_user_id}`)=follow_username].
+
+    if unfollow_user_id
+        div(class="alert3o")
+            span(class="alert3")
+                |You need to sign up in order to unfollow #[a(href=`/u/${unfollow_user_id}`)=unfollow_username].
+
+    form(method="post" action=form_action)
+        div
+            label(for="username") Username
+            input(name="username" id="username" value=username)
+        div
+            label(for="password") Password
+            input(name="password" id="password" type="password" )
+        div
+            input(type="checkbox" id="is_login" name="is_login" value="yes" checked=isLogin)
+            label(for="is_login") Log in now
+        div
+            input(type="submit" value="Sign Up")

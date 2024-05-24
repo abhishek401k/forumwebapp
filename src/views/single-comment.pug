@@ -1,0 +1,118 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/group-comment.css`)
+
+    if user && comment_reply_mode == 'quick'
+        script(src=`${jsDir}/shared.js`)
+
+include bbCodes.pug
+include userContent.pug
+
+block content
+    - const isSubModLoggedIn = user && (user.user_id == lead_mod_user_id)
+
+    nav.backpost-nav
+        a(href=`/p/${post_public_id}`) !{'&lt;'} Post
+
+    article.the-comment
+        div.cheader
+            |by
+            | 
+            a(href=`/u/${comment.user_public_id}`)=comment.username
+
+            | 
+            |on #{comment.created_on}
+
+            | 
+            a(href=`/c/${comment.comment_public_id}`) link
+
+            if user && comment.user_id == user.user_id
+                | 
+                a(href=`/c/${comment.comment_public_id}/edit`) edit
+
+            if user && (comment.user_id == user.user_id || adminUserId == user.user_id || isSubModLoggedIn)
+                | 
+                a(href=`/c/${comment.comment_public_id}/delete`) delete
+
+        div.the-comment-content
+            +bbCodes(comment.text_content)
+
+    if user
+        form(method="post" id="write-comment")
+            if errors.length
+                ul.uerror1
+                    each error in errors
+                        li #{error.msg}
+
+            div
+                label(for="text_content") Write a Comment
+                textarea(name="text_content" id="text_content" class="comment-box1" rows="10" cols="36")
+            div
+                input(type="submit" value="Submit Comment")
+
+    .comments
+        if comments.length
+            - let currIndent = comments[0].path.split('.').length - 2
+            - let isFirst = true
+            - const parentIndent = comment.path.split('.').length - 2
+
+            <ul>
+
+            for comment in comments
+                - const commentIndent = comment.path.split('.').length - 2
+
+                if isFirst
+
+                    - let i = 0
+                    - const numEmpty = commentIndent - parentIndent - 1
+
+                    while i < numEmpty
+                        <li style="list-style-type:none"><ul>
+                        - ++i
+
+                    <li>
+                    +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    - isFirst = false
+                else 
+                    if commentIndent > currIndent
+                        <ul><li>
+                        +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    else if commentIndent < currIndent
+                        - let diffIndent = currIndent - commentIndent
+                        - let n = 0
+
+                        </li>
+
+                        while n < diffIndent
+                            </ul></li>
+                            - ++n
+                        
+                        <li>
+                        +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    else
+                        </li><li>
+                        +ucListComment(comment, user, comment_reply_mode, true, isSubModLoggedIn)
+                    
+                    - currIndent = commentIndent
+
+            if currIndent > 0 
+                - let n = 0
+
+                </li>
+
+                while n < currIndent
+                    </ul></li>
+                    - ++n
+                
+                </ul>
+            else
+                </li></ul>
+
+            if page < total_pages
+                div
+                    - let pageUrl = `/c/${comment.comment_public_id}?p=${page + 1}`
+
+                    a(class="more" href=pageUrl) more &gt;
+        else
+            div.no-comments no comments yet

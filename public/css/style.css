@@ -1,0 +1,203 @@
+header, nav, main, footer, section {
+  display: block;
+}
+
+body {
+  margin-bottom: 48px;
+  margin-bottom: 3rem;
+}
+
+.main-nav, .settings-nav {
+  margin-bottom: 12px;
+  margin-bottom: .75rem;
+}
+
+.main-nav ul, .main-footer-nav ul, .settings-nav ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.main-nav ul li, .settings-nav ul li {
+  display: inline-block;
+  padding: 0;
+  margin: 0 10px 12px 0;
+  margin: 0 .625rem .75rem 0;
+}
+
+.main-footer-nav ul li {
+  display: inline-block;
+  padding: 0;
+  margin: 12px 10px 0 0;
+  margin: .75rem .625rem 0 0;
+}
+
+.main-nav a, .main-footer-nav a, .settings-nav a {
+  text-decoration: none;
+}
+
+.main-footer {
+  margin-top: 20px;
+  margin-top: 1.25rem;
+}
+
+.comments > ul {
+  padding-left: 24px;
+  padding-left: 1.5rem;
+}
+
+.comments li ul {
+  padding-left: 18px;
+  padding-left: 1.125rem;
+}
+
+.comments li {
+  margin-top: 18px;
+  margin-top: 1.125rem;
+}
+
+.comments :target {
+  padding: 3px;
+}
+
+.posts > div:last-child {
+  margin-bottom: 21px;
+  margin-bottom: 1.3125rem;
+}
+
+.the-post h1 {
+  margin: 0 0 2px 0;
+  margin: 0 0 .125rem 0;
+  padding: 0;
+}
+
+.the-post h1 a {
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.the-post .the-post-content,
+.the-comment-content {
+  margin: 8px 0 0 0;
+}
+
+.backpost-nav {
+  margin: 10px 0;
+}
+
+.backpost-nav a, .more {
+  padding: 4px 6px;
+  text-decoration: none;
+}
+
+.main-logo {
+  display: flex;
+  align-items: center;
+}
+
+.main-logo #peaches, .main-logo #stink {
+  font-size: 32px;
+  font-size: 2rem;
+}
+
+.main-logo #curr-castle {
+  font-size: 20px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.main-logo #curr-castle:hover {
+  text-decoration: underline;
+}
+
+.main-logo img {
+  width: 50px;
+  height: 50px;
+  margin-right: 4px;
+  display: block;
+}
+
+.main-logo a {
+  text-decoration: none;
+}
+
+.cheader {
+  margin-bottom: 2px;
+  margin-bottom: .125rem;
+}
+
+.cheader a {
+  text-decoration: none;
+}
+
+.cheader a:hover {
+  text-decoration: underline;
+}
+
+.clinks {
+  margin-top: 2px;
+  margin-top: .125rem;
+}
+
+.clinks a {
+  margin-right: 4px;
+  margin-right: .25rem;
+  text-decoration: none;
+  font-size: 14px;
+  font-size: .875rem;
+  font-weight: bold;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}
+
+#write-comment {
+  margin: 16px 0 16px 0;
+  margin: 1rem 0 1rem 0;
+}
+
+h1 {
+  margin: 0 0 16px 0;
+  margin: 0 0 1rem 0;
+}
+
+.pinfo1-under {
+  margin-top: 2px;
+  margin-top: .125rem;
+}
+
+.pinfo1 a:hover, .pinfo1-under a:hover, .pinfo-s a:hover {
+  text-decoration: underline;
+}
+
+.pinfo1 a, .pinfo1-under a, .pinfo-s a {
+  text-decoration: none;
+}
+
+.sort1o {
+  margin-bottom: 16px;
+  margin-bottom: 1rem;
+}
+
+.sort1 a {
+  margin-right: 6px;
+  margin-right: .375rem;
+  text-decoration: none;
+}
+
+.curr-sort {
+  font-weight: bold;
+}
+
+.no-comments {
+  margin-top: 16px;
+  margin-top: 1rem;
+}
+
+.ptitle {
+  font-size: 18px;
+  font-size: 1.125rem;
+}

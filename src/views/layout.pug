@@ -1,0 +1,123 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title=html_title
+    link(rel='stylesheet', href=`${cssDir}/style.css`)
+    link(rel='stylesheet', href=themeCss)
+    link(rel="icon" href="/images/favicon-32.png" sizes="32x32")
+    block head
+
+    if max_width !== null
+      style.
+        body {
+          background: ##{twoBgColor};
+        }
+
+        #body2 {
+          max-width: #{max_width}px;
+          max-width: #{max_width/16}rem;
+          margin: 0 auto;
+          background: ##{oneBgColor};
+          padding: 10px;
+          padding: .625rem;
+          border-radius: 4px;
+        }
+
+        @media(max-width: #{(max_width + 40)/16}em) {
+          body {
+            background: ##{oneBgColor};
+          }
+
+          #body2 {
+            padding: 0;
+            max-width: 100%;
+          }
+        }
+    else
+      style.
+        body {
+          background: ##{oneBgColor};
+        }
+
+    if posts_vertical_spacing
+      style.
+        .posts > div {
+          margin-bottom: #{posts_vertical_spacing}px;
+          margin-bottom: #{posts_vertical_spacing/16}rem;
+        }
+
+  body
+    div#body2
+      header
+        div.main-logo
+          a(href="/")
+            img(src=themeLogo)
+          span
+            a(href="/")
+                span#peaches Comment
+                | 
+                span#stink Castles
+            if curr_castle
+              a(href=`/r/${curr_castle}`)#curr-castle=curr_castle
+        nav.main-nav
+          ul
+            li
+              a(href="/") home
+
+            if user
+              li
+                a(href="/new") new post
+              li
+                a(href="/inbox") inbox
+              li
+                a(href="/dms") DMs
+              li
+                a(href="/settings") settings
+              li
+                a(href="/help") help
+              li
+                a(href="/logout") log out
+
+              //- if user never logged out, public_id may not be set
+              if typeof user.public_id == 'undefined'
+                li=user.username
+              else
+                li
+                  a(href=`/u/${user.public_id}`)=user.username
+
+            else
+              li
+                a(href="/sign-up") sign up
+              li
+                a(href="/login") log in
+              li
+                a(href="/settings") settings
+              li
+                a(href="/help") help
+
+            if curr_castle
+              li
+                a(href=`/r/${curr_castle}/about` class="sub-nav-item") about
+
+              if user
+                li
+                  a(href=`/new?sub=${curr_castle}` class="sub-nav-item") new post
+
+              if user && lead_mod_user_id && user.user_id == lead_mod_user_id
+                li
+                  a(href=`/r/${curr_castle}/settings` class="sub-nav-item") settings
+      main(class=main_class ? main_class : '')
+        block content
+      footer.main-footer
+        nav.main-footer-nav
+          ul
+            li
+              a(href="/privacy-policy") privacy policy
+            li
+              a(href="/contact-us") contact us
+            li
+              a(href="/api") API
+            li
+              a(href="https://github.com/ferg1e/comment-castles") GitHub

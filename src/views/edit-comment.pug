@@ -1,0 +1,19 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/edit-comment.css`)
+
+block content
+    h1 Edit Comment
+
+    form(method="post")
+        if errors.length
+            ul.uerror1
+                each error in errors
+                    li #{error.msg}
+
+        div
+            label(for="text_content") Comment
+            textarea(name="text_content" id="text_content" rows="10" cols="36")= textContent
+        div
+            input(type="submit" value="Save")

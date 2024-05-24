@@ -1,0 +1,28 @@
+form > div {
+    margin-bottom: 12px;
+}
+
+form label {
+    display: block;
+}
+
+form #text_content {
+    width: 370px;
+    height: 200px;
+}
+
+form #title {
+    width: 370px;
+}
+
+form #link, form #castle {
+    width: 370px;
+}
+
+
+/**/
+@media(max-width: 480px) {
+    form #link, form #castle, form #title, form #text_content {
+        width: 90%;
+    }
+}

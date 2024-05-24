@@ -1,0 +1,12 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/oauth-authorize.css`)
+
+block content
+    h1 Authorize App
+
+    form(method="post")
+        div#phrase1 App <b>#{app_name}</b> would like to access your account.
+        div
+            input(type="submit" value="Confirm")

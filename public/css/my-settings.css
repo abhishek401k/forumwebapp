@@ -1,0 +1,10 @@
+#l_time-zone,
+#l_site-width,
+#l_posts-per-page,
+#l_posts-vertical-spacing {
+    display: block;
+}
+
+form > div {
+    margin-bottom: 20px;
+}

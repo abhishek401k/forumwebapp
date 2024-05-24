@@ -1,0 +1,32 @@
+extends layout
+
+append head
+    link(rel='stylesheet', href=`${cssDir}/new-post2.css`)
+
+block content
+    h1= heading
+
+    if errors.length
+            ul.uerror1
+                each error in errors
+                    li #{error.msg}
+    form(method="post")
+        div
+            label(for="title") Title
+            textarea(name="title" id="title")=title
+
+        div
+            label(for="link") Link (optional)
+            input(name="link" id="link" value=`${link}`)
+
+        div
+            label(for="text_content") Content (optional)
+            textarea(name="text_content" id="text_content") #{textContent}
+
+        if is_castle
+            div
+                label(for="castle") Sub
+                input(name="castle" id="castle" value=`${castle}`)
+
+        div
+            input(type="submit" value=submitLabel)

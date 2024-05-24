@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1 Settings
+
+    nav.settings-nav
+        ul
+            if user
+                li
+                    a(href="/settings") general
+                li
+                    a(href="/settings/username") username
+                li
+                    a(href="/settings/profile") profile
+                li
+                    a(href="/settings/app-ids") app IDs
+    div
+        block content2
